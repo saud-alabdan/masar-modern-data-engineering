@@ -1,0 +1,15 @@
+{
+  "participant_name": "Saud Alabdan",
+  "repository_url": "https://github.com/saud-alabdan/masar-modern-data-engineering",
+  "branch": "develop",
+  "course_code": "SDA-DSC-214",
+  "programme": "Modern Data Engineering for AI Systems",
+  "academy": "SDAIA Academy",
+  "academy_url": "https://github.com/SDAIAAcademy",
+  "hashtag": "#SDAIAAcademy",
+  "project": "Masar",
+  "labs_are_the_project": true,
+  "dataset": "MASAR_SMALL_V1 (synthetic)",
+  "executed_notebook": "finalproject.ipynb",
+  "note": "Same accumulated eight labs. No extra capstone."
+}
