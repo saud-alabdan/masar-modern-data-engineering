@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "e9a491cf-24d8-4449-b9f1-24ea9e44218c",
+      "name": "silver_trips_snapshot"
+    },
+    "batch_definition": {
+      "id": "4a06da24-3ee8-4592-a650-6e98bb56645d",
+      "name": "whole_snapshot"
+    },
+    "datasource": {
+      "id": "de35167f-cf30-4a8c-84a2-e866c5c45793",
+      "name": "masar_silver"
+    }
+  },
+  "id": "b85429c5-5c4b-49ba-aec2-3ccee05a6560",
+  "name": "validate_rechecked",
+  "suite": {
+    "id": "61ebefcc-6d7f-4c2a-aef8-3736de6dd097",
+    "name": "masar_silver_quality_v1"
+  }
+}
