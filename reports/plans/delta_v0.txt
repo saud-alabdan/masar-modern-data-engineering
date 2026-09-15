@@ -1,0 +1,42 @@
+== Physical Plan ==
+AdaptiveSparkPlan (6)
++- HashAggregate (5)
+   +- Exchange (4)
+      +- HashAggregate (3)
+         +- Project (2)
+            +- Scan parquet  (1)
+
+
+(1) Scan parquet 
+Output [1]: [fare_sar#7322]
+Batched: true
+Location: PreparedDeltaFileIndex [file:/C:/Projects/masar-run/outputs/day01_bronze_lk218p1f/mini_lakehouse/bronze/trips]
+ReadSchema: struct<fare_sar:string>
+
+(2) Project
+Output [1]: [cast(fare_sar#7322 as decimal(12,2)) AS fare#7339]
+Input [1]: [fare_sar#7322]
+
+(3) HashAggregate
+Input [1]: [fare#7339]
+Keys: []
+Functions [3]: [partial_count(1), partial_count(fare#7339), partial_sum(fare#7339)]
+Aggregate Attributes [4]: [count#7816L, count#7817L, sum#7818, isEmpty#7819]
+Results [4]: [count#7820L, count#7821L, sum#7822, isEmpty#7823]
+
+(4) Exchange
+Input [4]: [count#7820L, count#7821L, sum#7822, isEmpty#7823]
+Arguments: SinglePartition, ENSURE_REQUIREMENTS, [plan_id=3228]
+
+(5) HashAggregate
+Input [4]: [count#7820L, count#7821L, sum#7822, isEmpty#7823]
+Keys: []
+Functions [3]: [count(1), count(fare#7339), sum(fare#7339)]
+Aggregate Attributes [3]: [count(1)#7342L, count(fare#7339)#7344L, sum(fare#7339)#7346]
+Results [3]: [count(1)#7342L AS rows#7343L, count(fare#7339)#7344L AS nonnull_fares#7345L, sum(fare#7339)#7346 AS fare_total#7347]
+
+(6) AdaptiveSparkPlan
+Output [3]: [rows#7343L, nonnull_fares#7345L, fare_total#7347]
+Arguments: isFinalPlan=false
+
+
