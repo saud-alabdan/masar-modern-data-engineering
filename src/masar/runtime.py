@@ -86,7 +86,11 @@ def start_spark(work: Path, *, kafka: bool = False):
         .config("spark.sql.warehouse.dir", str(workspace_path(work, "warehouse"))))
     if os.environ.get("MASAR_IVY_DIR"):
         builder = builder.config("spark.jars.ivy", str(Path(os.environ["MASAR_IVY_DIR"]).resolve()))
-    extra = ["org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.8"] if kafka else []
+    from pyspark import SparkContext
+    # PySpark fixes JVM packages when the gateway first starts. The combined all-days
+    # notebook uses one kernel, so load the Kafka connector at that point too.
+    preload = kafka or SparkContext._gateway is None
+    extra = ["org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.8"] if preload else []
     spark = configure_spark_with_delta_pip(builder, extra_packages=extra).getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
     return spark

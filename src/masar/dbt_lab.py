@@ -57,7 +57,7 @@ def identifier(value: str) -> str:
 
 
 def sql_path(path: Path) -> str:
-    text = str(Path(path).resolve())
+    text = Path(path).resolve().as_posix()  # forward slashes keep Windows paths valid SQL literals
     if any(char in text for char in "'\\\n\r\x00"):
         raise ValueError('The workspace path contains an unsupported SQL-literal character')
     return "'" + text + "'"
@@ -305,7 +305,10 @@ def run_dbt_lab(root: Path, *, include_correction: bool = False,
                     raise AssertionError('Native dbt output differs from the independent fixed-source reference')
                 actual_delta = spark.sql(f'DESCRIBE DETAIL `{target_schema}`.`silver_trips`').first().asDict()
                 from urllib.parse import urlparse, unquote
-                location = Path(unquote(urlparse(actual_delta['location']).path))
+                raw_location = unquote(urlparse(actual_delta['location']).path)
+                if re.match(r'^/[A-Za-z]:', raw_location):  # file:/C:/... on Windows
+                    raw_location = raw_location[1:]
+                location = Path(raw_location)
                 if not location.resolve().is_relative_to(work):
                     raise ValueError('dbt created a Delta table outside its isolated workspace')
                 artifacts = delta_artifacts(work, location)

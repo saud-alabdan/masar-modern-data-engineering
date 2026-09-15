@@ -23,7 +23,7 @@ from masar.workspace import (
 
 
 def _table_path(path: Path) -> str:
-    value = str(Path(path).resolve())
+    value = Path(path).resolve().as_posix()  # forward slashes for portable Windows paths
     if '`' in value or any(ord(c) < 32 for c in value):
         raise ValueError('Unsafe SQL path')
     return 'delta.`' + value + '`'
